@@ -43,7 +43,7 @@ all_info = dict()
 
 all_subjects = project.subjects()
 
-if (len(sys.argv) < 1):
+if (len(sys.argv) < 2):
     print('Querying all subjects')
 else:
     try:
@@ -72,7 +72,7 @@ for sub in all_subjects:
             acq_complete = False
             for f in acq.files:
                 if f.type != 'dicom':
-                    next
+                    continue
                 acq_found_dicom = True
                 file_info = f.info
                 if (not file_info):

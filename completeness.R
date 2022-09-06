@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 library(tidyverse)
 
 completeness = data.frame(SessionID = character(), SubjectLabel = character(), SessionLabel = character(), HasSMRI = logical(),

@@ -65,6 +65,7 @@ for sub in all_subjects:
             acq_label = acq.label
             acq_series_description = 'NA'
             acq_series_number = 'NA'
+            acq_acquisition_time = 'NA'
             acq_study_date = 'NA'
             acq_found_dicom = False
             acq_num_dicom_files = 0
@@ -91,6 +92,10 @@ for sub in all_subjects:
                 except KeyError:
                     acq_series_number = 'NA'
                 try:
+                    acq_acquisition_time = file_info['AcquisitionTime']
+                except KeyError:
+                    acq_acquisition_time = 'NA'
+                try:
                     acq_study_date = file_info['StudyDate']
                 except KeyError:
                     print('No study date for acquisition {}/{}/{} {}'.format(sub.label, ses.label, acq_label, acq.id))
@@ -99,12 +104,12 @@ for sub in all_subjects:
             acq_ignore = (acq_series_description != 'NA' and not (acq_series_description in expectedNumDicomFiles.keys()))
             if (acq_series_description != 'NA' and (acq_series_description in expectedNumDicomFiles.keys())):
                 acq_complete = (acq_num_dicom_files == expectedNumDicomFiles[acq_series_description])
-            all_info[acq_id] = [sub_id, sub_label, ses_id, ses_label, acq_label, acq_study_date, acq_series_number, acq_series_description,
+            all_info[acq_id] = [sub_id, sub_label, ses_id, ses_label, acq_label, acq_study_date, acq_acquisition_time, acq_series_number, acq_series_description,
                                 acq_missing_info, acq_ignore, acq_found_dicom, acq_num_dicom_files, acq_complete]
 
 
 df = pd.DataFrame.from_dict(all_info, orient='index').reset_index()
-df.columns=['AcquisitionID', 'SubjectID', 'SubjectLabel', 'SessionID', 'SessionLabel', 'AcquisitionLabel', 'StudyDate', 'SeriesNumber', 'SeriesDescription',
+df.columns=['AcquisitionID', 'SubjectID', 'SubjectLabel', 'SessionID', 'SessionLabel', 'AcquisitionLabel', 'StudyDate', 'AcquisitionTime', 'SeriesNumber', 'SeriesDescription',
                             'MissingInfo', 'Ignore', 'FoundDicom', 'NumDicomFiles','Complete']
 
 # Export dataframe to csv
